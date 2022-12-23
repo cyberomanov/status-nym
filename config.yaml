@@ -1,0 +1,13 @@
+nym:
+  identity: "7T...kD"
+  moniker: "cyberomanov"
+
+settings:
+  
+  # telegram
+  bot_api_key: "1703:AA-BB_CC"
+  alarm_chat_id: "-2109"
+  log_chat_id: "-9012"
+  
+  # logic
+  hour_uptime_for_alarm: 80  # if hour uptime is less than N > alarm
