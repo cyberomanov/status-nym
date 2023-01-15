@@ -10,14 +10,15 @@ this system will alert you with telegram about your mixnode/s status.<br>
 
 ### Screenshots
 
-Log:
+<p align="center">Log example:</p>
 <p align="center">
 <img width="400" alt="image" src="./assets/terminal_log.png">
 <br> <br>
 <img width="400" alt="image" src="./assets/telegram_log.png">
 <br> <br>
 </p>
-Alarm:
+
+<p align="center">Alarm example:</p>
 <p align="center">
 <img width="400" alt="image" src="./assets/terminal_alarm.png">
 <br> <br>
@@ -28,7 +29,7 @@ Alarm:
 
 1. Create telegram bot via `@BotFather`, customize it and get `bot_API_token` ([how_to](https://www.siteguarding.com/en/how-to-get-telegram-bot-api-token)).
 2. Create at least 2 chats: `alarm` and `log`. Customize them, add your bot into this chats and get `chat_IDs` ([how_to](https://stackoverflow.com/questions/32423837/telegram-bot-how-to-get-a-group-chat-id)).
-3. Connect to your server where you plan to install nym-status-system.
+3. Connect to your server where you plan to install `nym-status-system`.
 4. Install `python3.10` or newer:
 ```
 # one-line-command
@@ -70,7 +71,7 @@ python3 nym.py
 ```
 9. If all seems okay, then edit your crontab with `crontab -e`:
 ```
-# ping
+# nym
 */10 * * * * cd /root/status-nym/ && /usr/bin/python3 status-nym.py
 ```
 > check your logs in 5-10-15 minutes here: `~/status-nym/log/nym.log`
