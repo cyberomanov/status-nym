@@ -1,13 +1,8 @@
-nym:
-  identity: "7T...kD"
-  moniker: "cyberomanov"
+identity:
+  - 7TWEw9qQxsc8w4WhPAX6zjZ8vuNBdtP21zUVN8K26RkD
+  - A3k4tMWHgZ8GNDxckrGBkyn4RRZxhXsRoPqg7uSnAn38
 
 settings:
-  
-  # telegram
   bot_api_key: "1703:AA-BB_CC"
   alarm_chat_id: "-2109"
   log_chat_id: "-9012"
-  
-  # logic
-  hour_uptime_for_alarm: 80  # if hour uptime is less than N > alarm
