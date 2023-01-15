@@ -17,10 +17,15 @@ def nym():
         price = get_price()
 
         for identity in identities:
-            report = get_nym_report(identity=identity)
+            try:
+                report = get_nym_report(identity=identity)
+            except Exception as e:
+                logger.error(f"response from nodes.guru is not ok: {e}")
+                break
+
             message = get_nym_message(report=report, price=price)
 
-            if message.status:
+            if message.status.value == 0:
                 logger.success('no warnings found.')
                 telegram_response = telegram.send_log(head=message.head, body=message.body)
             else:

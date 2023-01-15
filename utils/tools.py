@@ -45,6 +45,7 @@ def get_nym_message(report: NymReport, price: float) -> Message:
     message = Message(status=Status.LOG, head=head, body='')
     logger.success(report.description.name)
 
+    # report.uptime.last_hour = 62
     if report.uptime.last_hour < hour_uptime_for_alarm:
         message.status = Status.ALARM
         text = f"_hour/day > {report.uptime.last_hour}%/{report.uptime.last_day}%."
@@ -54,6 +55,7 @@ def get_nym_message(report: NymReport, price: float) -> Message:
         text = f"hour/day > {report.uptime.last_hour}%/{report.uptime.last_day}%."
         logger.info(text)
 
+    # report.info.outdated = True
     if report.info.outdated:
         message.status = Status.ALARM
         text = f"_version > {report.info.mixnode.version}."
@@ -68,6 +70,7 @@ def get_nym_message(report: NymReport, price: float) -> Message:
         text = f"outdated > false."
         logger.info(text)
 
+    # report.info.mixnode.status = 'inactive'
     if report.info.mixnode.status != 'active':
         message.status = Status.ALARM
         text = f"_status > inactive."
