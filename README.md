@@ -72,7 +72,7 @@ python3 nym.py
 9. If all seems okay, then edit your crontab with `crontab -e`:
 ```
 # nym
-*/10 * * * * cd /root/status-nym/ && /usr/bin/python3 status-nym.py
+*/10 * * * * cd /root/status-nym/ && /usr/bin/python3 nym.py
 ```
 > check your logs in 5-10-15 minutes here: `~/status-nym/log/nym.log`
 ---------
