@@ -8,7 +8,6 @@ class Telegram:
                  bot_api_token: str,
                  log_chat_id: str,
                  alarm_chat_id: str):
-
         self.bot_api_token = bot_api_token
         self.log_chat_id = log_chat_id
         self.alarm_chat_id = alarm_chat_id

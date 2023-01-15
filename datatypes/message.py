@@ -10,5 +10,5 @@ class Status(Enum):
 
 class Message(BaseModel):
     status: Status
-    head: str | None
-    body: str | None
+    head: str
+    body: str

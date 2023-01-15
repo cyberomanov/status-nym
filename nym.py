@@ -11,11 +11,9 @@ def nym():
         add_logger()
         config = get_config()
         settings, identities = config.settings, config.identity
-
         telegram = Telegram(bot_api_token=settings.bot_api_key,
                             log_chat_id=settings.log_chat_id,
                             alarm_chat_id=settings.alarm_chat_id)
-
         price = get_price()
 
         for identity in identities:
@@ -23,8 +21,10 @@ def nym():
             message = get_nym_message(report=report, price=price)
 
             if message.status:
+                logger.success('no warnings found.')
                 telegram_response = telegram.send_log(head=message.head, body=message.body)
             else:
+                logger.warning('something is not ok.')
                 telegram_response = telegram.send_alarm(head=message.head, body=message.body)
 
             if not telegram_response.ok:
