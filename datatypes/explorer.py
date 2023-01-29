@@ -68,5 +68,3 @@ class NymReport(BaseModel):
     rewards: Rewards
     balance: Balance
     owner_delegation: list[OwnerDelegation]
-
-
