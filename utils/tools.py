@@ -33,7 +33,8 @@ def get_nym_report(identity: str) -> NymReport:
         uptime=explorer.get_mixnode_uptime(),
         info=explorer.get_mixnode_info(),
         rewards=explorer.get_estimated_rewards(),
-        balance=explorer.get_owner_balance()
+        balance=explorer.get_owner_balance(),
+        owner_delegation=explorer.get_owner_delegation()
     )
 
 
@@ -48,11 +49,11 @@ def get_nym_message(report: NymReport, price: float) -> Message:
     # report.uptime.last_hour = 62
     if report.uptime.last_hour < hour_uptime_for_alarm:
         message.status = Status.ALARM
-        text = f"_hour/day > {report.uptime.last_hour}%/{report.uptime.last_day}%."
+        text = f"_hour/day > {int(report.uptime.last_hour)}%/{int(report.uptime.last_day)}%."
         logger.warning(text)
         message.body += text + '\n'
     else:
-        text = f"hour/day > {report.uptime.last_hour}%/{report.uptime.last_day}%."
+        text = f"hour/day > {int(report.uptime.last_hour)}%/{int(report.uptime.last_day)}%."
         logger.info(text)
 
     # report.info.outdated = True
@@ -81,13 +82,26 @@ def get_nym_message(report: NymReport, price: float) -> Message:
         logger.info(text)
 
     delegations = report.info.mixnode.total_delegation.amount
-    self_stake = report.info.mixnode.pledge_amount.amount
-    total_stake = round((delegations + self_stake) / denom, 2)
+    bond = report.info.mixnode.pledge_amount.amount
+    total_stake = round((delegations + bond) / denom, 2)
     if price > 0:
         total_stake_usd = round(total_stake * price, 2)
         text = f"stake > {total_stake:.2f}, ${total_stake_usd:.2f}."
     else:
         text = f"stake > {total_stake:.2f}."
+    message.body += text + '\n'
+    logger.info(text)
+
+    self_delegation = 0
+    for delegation in report.owner_delegation:
+        if delegation.mixId == report.info.mixnode.mix_id:
+            self_delegation = round(delegation.amount.amount / denom, 2)
+    self_stake = round(bond / denom + self_delegation, 2)
+    if price > 0:
+        total_self_stake_usd = round(self_stake * price, 2)
+        text = f"self-stake > {self_stake:.2f}, ${total_self_stake_usd:.2f}."
+    else:
+        text = f"self-stake > {self_stake:.2f}."
     message.body += text + '\n'
     logger.info(text)
 
@@ -170,6 +184,6 @@ def _format_body(body: str) -> str:
     new_body = _text_align_by_usd(text=new_body, max_arrow_index=max_arrow_index, max_usd_index=max_usd_index)
 
     if not new_body.startswith('stake'):
-        new_body = new_body.replace('stake', '\nstake')
+        new_body = new_body.replace('stake', '\nstake', 1)
 
     return new_body

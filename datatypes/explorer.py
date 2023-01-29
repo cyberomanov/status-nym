@@ -46,6 +46,14 @@ class Balance(BaseModel):
     claimable: DenomValue
 
 
+class OwnerDelegation(BaseModel):
+    amount: DenomValue
+    mixId: int
+    block: int
+    identityKey: str
+    moniker: str
+
+
 class Description(BaseModel):
     name: str
     description: str
@@ -59,5 +67,6 @@ class NymReport(BaseModel):
     info: Info
     rewards: Rewards
     balance: Balance
+    owner_delegation: list[OwnerDelegation]
 
 

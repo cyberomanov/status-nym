@@ -2,7 +2,7 @@ import json
 
 import requests
 
-from datatypes.explorer import Info, Uptime, Rewards, Balance, Description
+from datatypes.explorer import Info, Uptime, Rewards, Balance, Description, OwnerDelegation
 
 
 class Explorer:
@@ -39,6 +39,14 @@ class Explorer:
     def get_owner_balance(self) -> Balance:
         response = self.session.get(f"{self.explorer}/accounts/{self.owner}/balance")
         return Balance.parse_obj(json.loads(response.content))
+
+    def get_owner_delegation(self) -> list[OwnerDelegation]:
+        owner_delegations = []
+        response = self.session.get(f"{self.explorer}/accounts/{self.owner}/delegations")
+        delegation_list = json.loads(response.content)
+        for delegation in delegation_list:
+            owner_delegations.append(OwnerDelegation.parse_obj(delegation))
+        return owner_delegations
 
     def get_mixnode_description(self) -> Description:
         response = self.session.get(f"{self.explorer}/mixnodes/description?"

@@ -20,7 +20,16 @@ def nym():
             try:
                 report = get_nym_report(identity=identity)
             except Exception as e:
-                logger.error(f"response from nodes.guru is not ok: {e}")
+                telegram_response = telegram.send_log(head="nym", body="response from 'nodes.guru' is not ok.")
+                if not telegram_response.ok:
+                    logger.error(
+                        f"telegram response is not ok. "
+                        f"code: {telegram_response.error_code}, "
+                        f"description: {telegram_response.description}."
+                    )
+                else:
+                    logger.warning(f"telegram message successfully sent.")
+                logger.error(f"response from 'nodes.guru' is not ok: {e}")
                 break
 
             message = get_nym_message(report=report, price=price)
