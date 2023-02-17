@@ -39,6 +39,7 @@ def nym():
                 telegram_response = telegram.send_log(head=message.head, body=message.body)
             else:
                 logger.warning('something is not ok.')
+                telegram_response = telegram.send_log(head=message.head, body=message.body)
                 telegram_response = telegram.send_alarm(head=message.head, body=message.body)
 
             if not telegram_response.ok:

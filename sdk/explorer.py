@@ -34,7 +34,11 @@ class Explorer:
         return Uptime.parse_obj(self._get_mixnode_info(specific='uptime'))
 
     def get_estimated_rewards(self) -> Rewards:
-        return Rewards.parse_obj(self._get_mixnode_info(specific='estimated_reward'))
+        response = self._get_mixnode_info(specific='estimated_reward')
+        try:
+            return Rewards.parse_obj(response)
+        except:
+            return Rewards(operator=0)
 
     def get_owner_balance(self) -> Balance:
         response = self.session.get(f"{self.explorer}/accounts/{self.owner}/balance")
