@@ -43,6 +43,7 @@ class NymPrice(BaseModel):
 
 class Balance(BaseModel):
     spendable: DenomValue
+    delegated: DenomValue
     claimable: DenomValue
 
 

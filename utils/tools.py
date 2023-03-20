@@ -82,8 +82,8 @@ def get_nym_message(report: NymReport, price: float) -> Message:
         logger.info(text)
 
     delegations = report.info.mixnode.total_delegation.amount
-    bond = report.info.mixnode.pledge_amount.amount
-    total_stake = round((delegations + bond) / denom, 2)
+    self_stake = report.balance.delegated.amount
+    total_stake = round((delegations + self_stake) / denom, 2)
     if price > 0:
         total_stake_usd = round(total_stake * price, 2)
         text = f"stake > {total_stake:.2f}, ${total_stake_usd:.2f}."
@@ -92,11 +92,7 @@ def get_nym_message(report: NymReport, price: float) -> Message:
     message.body += text + '\n'
     logger.info(text)
 
-    self_delegation = 0
-    for delegation in report.owner_delegation:
-        if delegation.mixId == report.info.mixnode.mix_id:
-            self_delegation = round(delegation.amount.amount / denom, 2)
-    self_stake = round(bond / denom + self_delegation, 2)
+    self_stake = round(self_stake / denom, 2)
     if price > 0:
         total_self_stake_usd = round(self_stake * price, 2)
         text = f"self-stake > {self_stake:.2f}, ${total_self_stake_usd:.2f}."
