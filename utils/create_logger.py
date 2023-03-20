@@ -19,5 +19,5 @@ def add_logger(log_output: str = LOG_OUTPUT, log_rotation: str = LOG_ROTATION):
         "|                    NYM  {sv}                    |\n"
         "| ----------------------------------------------- |\n"
         "|            with love by @cyberomanov            |\n"
-        "└ ----------------------------------------------- ┘".format(sv='v1.2')
+        "└ ----------------------------------------------- ┘".format(sv='v1.4')
     )
