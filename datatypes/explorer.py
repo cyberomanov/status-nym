@@ -45,6 +45,7 @@ class Balance(BaseModel):
     spendable: DenomValue
     delegated: DenomValue
     claimable: DenomValue
+    selfBonded: DenomValue
 
 
 class OwnerDelegation(BaseModel):
