@@ -38,7 +38,7 @@ def get_nym_report(identity: str) -> NymReport:
     )
 
 
-def get_nym_message(report: NymReport, price: float) -> Message:
+def get_nym_message(report: NymReport, price: float, ignore_inactive: bool) -> Message:
     hour_uptime_for_alarm = 80
     denom = 1_000_000
 
@@ -73,7 +73,8 @@ def get_nym_message(report: NymReport, price: float) -> Message:
 
     # report.info.mixnode.status = 'inactive'
     if report.info.mixnode.status != 'active':
-        message.status = Status.ALARM
+        if not ignore_inactive:
+            message.status = Status.ALARM
         text = f"_status > inactive."
         logger.warning(text)
         message.body += text + '\n'

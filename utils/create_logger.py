@@ -6,7 +6,7 @@ LOG_OUTPUT = "./log/nym.log"
 LOG_ROTATION = "50 MB"
 
 
-def add_logger(log_output: str = LOG_OUTPUT, log_rotation: str = LOG_ROTATION):
+def add_logger(log_output: str = LOG_OUTPUT, log_rotation: str = LOG_ROTATION, version: str = 'v1.0'):
     logger.remove()
     logger.add(
         stderr,
@@ -19,5 +19,5 @@ def add_logger(log_output: str = LOG_OUTPUT, log_rotation: str = LOG_ROTATION):
         "|                    NYM  {sv}                    |\n"
         "| ----------------------------------------------- |\n"
         "|            with love by @cyberomanov            |\n"
-        "└ ----------------------------------------------- ┘".format(sv='v1.4')
+        "└ ----------------------------------------------- ┘".format(sv=version)
     )

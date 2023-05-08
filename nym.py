@@ -8,7 +8,7 @@ from utils.tools import get_price, get_nym_report, get_nym_message
 
 def nym():
     try:
-        add_logger()
+        add_logger(version='v1.5')
         config = get_config()
         settings, identities = config.settings, config.identity
         telegram = Telegram(bot_api_token=settings.bot_api_key,
@@ -32,7 +32,7 @@ def nym():
                 logger.error(f"response from 'nodes.guru' is not ok: {e}")
                 break
 
-            message = get_nym_message(report=report, price=price)
+            message = get_nym_message(report=report, price=price, ignore_inactive=settings.ignore_inactive)
 
             if message.status.value == 0:
                 logger.success('no warnings found.')

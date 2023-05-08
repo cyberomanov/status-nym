@@ -4,6 +4,8 @@ identity:
   - EQ4mjyw9dGkLqfqHisy7BGfQHdr5JeCZ3chwoBUJorMx
 
 settings:
+  ignore_inactive: false
+
   bot_api_key: "1703:AA-BB_CC"
   alarm_chat_id: "-2109"
   log_chat_id: "-9012"

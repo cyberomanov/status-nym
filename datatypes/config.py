@@ -7,6 +7,7 @@ class Nym(BaseModel):
 
 
 class Settings(BaseModel):
+    ignore_inactive: bool
     bot_api_key: str
     alarm_chat_id: str
     log_chat_id: str
