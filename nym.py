@@ -11,7 +11,7 @@ from tools.price import get_price
 
 def nym(settings: Settings, identity: str, price: float, telegram: Telegram):
     try:
-        report = get_nym_report(identity=identity)
+        report = get_nym_report(identity=identity, settings=settings)
     except Exception as e:
         telegram_response = telegram.send_log(head="nym", body="bad response.")
         if not telegram_response.ok:

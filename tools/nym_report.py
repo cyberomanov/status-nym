@@ -4,7 +4,7 @@ from sdk.explorer import Explorer
 from tools.harbor import get_harbor_response
 
 
-def get_nym_report(identity: str, setting: Settings):
+def get_nym_report(identity: str, settings: Settings):
     explorer = Explorer(identity=identity)
     mixnode = explorer.get_mixnode_response(identity=identity)
 
@@ -20,8 +20,8 @@ def get_nym_report(identity: str, setting: Settings):
         mixnode=mixnode,
         harbor=get_harbor_response(
             mixnode_id=mixnode.mix_id,
-            mobile_proxy=setting.mobile_proxy,
-            change_ip_url=setting.change_ip_url
+            mobile_proxy=settings.mobile_proxy,
+            change_ip_url=settings.change_ip_url
         ),
         # balance=explorer.get_balance(address=mixnode.owner),
         owner_delegation=explorer.get_owner_delegation(mixnode_id=mixnode.mix_id)
