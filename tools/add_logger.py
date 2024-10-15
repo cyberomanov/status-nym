@@ -13,11 +13,3 @@ def add_logger(log_output: str = LOG_OUTPUT, log_rotation: str = LOG_ROTATION, v
         format="<bold><blue>{time:HH:mm:ss}</blue> | <level>{level}</level> | <level>{message}</level></bold>"
     )
     logger.add(sink=log_output, rotation=log_rotation)
-
-    print(
-        "┌ ----------------------------------------------- ┐\n"
-        "|                    NYM  {sv}                    |\n"
-        "| ----------------------------------------------- |\n"
-        "|            with love by @cyberomanov            |\n"
-        "└ ----------------------------------------------- ┘".format(sv=version)
-    )
