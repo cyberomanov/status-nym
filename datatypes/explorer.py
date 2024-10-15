@@ -1,72 +1,63 @@
+from typing import Optional
+
 from pydantic import BaseModel
 
 
-class DenomValue(BaseModel):
-    amount: float
+class Location(BaseModel):
+    two_letter_iso_country_code: str
+    three_letter_iso_country_code: str
+    country_name: str
+    latitude: float
+    longitude: float
+
+
+class PledgeAmount(BaseModel):
     denom: str
+    amount: str
 
 
-class Mixnode(BaseModel):
+class TotalDelegation(BaseModel):
+    denom: str
+    amount: str
+
+
+class MixNode(BaseModel):
     host: str
-    http_api_port: str
+    mix_port: int
+    verloc_port: int
+    http_api_port: int
+    sphinx_key: str
+    identity_key: str
     version: str
+
+
+class NodePerformance(BaseModel):
+    most_recent: str
+    last_hour: str
+    last_24h: str
+
+
+class OperatingCost(BaseModel):
+    denom: str
+    amount: str
+
+
+class MixNodeModel(BaseModel):
     mix_id: int
-    owner: str
-    uptime: float
+    location: Optional[Location]
     status: str
-    pledge_amount: DenomValue
-    total_delegation: DenomValue
-    operating_cost: DenomValue
-
-
-class Info(BaseModel):
-    mixnode: Mixnode
-    outdated: bool
-
-
-class Uptime(BaseModel):
-    last_day: float
-    last_hour: float
-
-
-class Rewards(BaseModel):
-    operator: float
-
-
-class Price(BaseModel):
-    usd: float
-
-
-class NymPrice(BaseModel):
-    nym: Price
-
-
-class Balance(BaseModel):
-    spendable: DenomValue
-    delegated: DenomValue
-    claimable: DenomValue
-    selfBonded: DenomValue
-
-
-class OwnerDelegation(BaseModel):
-    amount: DenomValue
-    mixId: int
-    block: int
-    identityKey: str
-    moniker: str
-
-
-class Description(BaseModel):
-    name: str
-    description: str
-    link: str
-    location: str
-
-
-class NymReport(BaseModel):
-    description: Description
-    uptime: Uptime
-    info: Info
-    rewards: Rewards
-    balance: Balance
-    owner_delegation: list[OwnerDelegation]
+    pledge_amount: PledgeAmount
+    total_delegation: TotalDelegation
+    owner: str
+    layer: int
+    mix_node: MixNode
+    stake_saturation: float
+    uncapped_saturation: float
+    avg_uptime: int
+    node_performance: NodePerformance
+    estimated_operator_apy: float
+    estimated_delegators_apy: float
+    operating_cost: OperatingCost
+    profit_margin_percent: str
+    family_id: Optional[str]
+    blacklisted: bool
