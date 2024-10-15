@@ -9,3 +9,6 @@ settings:
   bot_api_key: "1703:AA-BB_CC"
   alarm_chat_id: "-2109"
   log_chat_id: "-9012"
+
+  mobile_proxy: "socks5://log:pass@ip:port"
+  change_ip_url: ""  # leave empty, if you have travchis
