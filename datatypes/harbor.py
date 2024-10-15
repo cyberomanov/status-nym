@@ -1,5 +1,4 @@
 from typing import List, Optional, Dict
-
 from pydantic import BaseModel
 
 
@@ -74,20 +73,67 @@ class FullDetails(BaseModel):
     uncapped_stake_saturation: str
 
 
-class SelfDescribed(BaseModel):
-    bonding_height: int
-    is_unbonding: bool
-    layer: int
-    mix_id: int
-    mix_node: MixNode
-    original_pledge: PledgeAmount
-    owner: str
-    proxy: Optional[str]
+class Authenticator(BaseModel):
+    address: str
+
+
+class AuxiliaryDetails(BaseModel):
+    accepted_operator_terms_and_conditions: bool
+    location: Optional[str]
+
+
+class BuildInformation(BaseModel):
+    binary_name: str
+    build_timestamp: str
+    build_version: str
+    cargo_profile: str
+    cargo_triple: str
+    commit_branch: str
+    commit_sha: str
+    commit_timestamp: str
+    rustc_channel: str
+    rustc_version: str
+
+
+class HostInformation(BaseModel):
+    hostname: Optional[str]
+    ip_address: List[str]
+    keys: Dict[str, str]
+
+
+class IpPacketRouter(BaseModel):
+    address: str
+
+
+class MixnetWebsockets(BaseModel):
+    ws_port: int
+    wss_port: Optional[int]
+
+
+class NetworkRequester(BaseModel):
+    address: str
+    uses_exit_policy: bool
+
+
+class Role(BaseModel):
+    Mixnode: Dict[str, int]
+
+
+class SelfDescribedDetails(BaseModel):
+    authenticator: Optional[Authenticator]
+    auxiliary_details: AuxiliaryDetails
+    build_information: BuildInformation
+    host_information: HostInformation
+    ip_packet_router: IpPacketRouter
+    last_polled: str
+    mixnet_websockets: MixnetWebsockets
+    network_requester: NetworkRequester
+    role: Role
 
 
 class SelfDescribedModel(BaseModel):
-    bond: SelfDescribed
-    self_described: Optional[Dict[str, Optional[str]]]
+    bond: BondInformation
+    self_described: Optional[SelfDescribedDetails]
 
 
 class Description(BaseModel):
