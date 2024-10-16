@@ -150,6 +150,6 @@ class HarborResponse(BaseModel):
     is_dp_delegatee: bool
     total_stake: int
     full_details: FullDetails
-    self_described: SelfDescribedModel
+    self_described: Optional[SelfDescribedModel]
     description: Description
     last_updated_utc: str

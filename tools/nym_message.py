@@ -21,7 +21,7 @@ def get_nym_message(report: NymReport, price: float, ignore_inactive: bool) -> M
         text = f"hour/day > {int(report.uptime.last_hour * 100)}%/{int(report.uptime.last_day * 100)}%."
         logger.info(text)
 
-    text = f"version > {report.harbor.self_described.bond.mix_node.version}."
+    text = f"version > {report.mixnode.mix_node.version}."
     logger.info(text)
     message.body += text + '\n'
 
