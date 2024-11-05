@@ -12,3 +12,4 @@ class Message(BaseModel):
     status: Status
     head: str
     body: str
+    dashboard: str

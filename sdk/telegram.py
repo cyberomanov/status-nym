@@ -1,6 +1,12 @@
+import re
+
 import requests
 
 from datatypes.telegram import Response
+
+
+def _escape_markdown_v2(text: str) -> str:
+    return re.sub(r'([_*\[\]()~`>#+-=|{}.!])', r'\\\1', text)
 
 
 class Telegram:
@@ -12,7 +18,7 @@ class Telegram:
         self.log_chat_id = log_chat_id
         self.alarm_chat_id = alarm_chat_id
 
-    def _send_message(self, text: str, chat_id: str, parse_mode: str = "HTML") -> Response:
+    def _send_message(self, text: str, chat_id: str, parse_mode: str = "MarkdownV2") -> Response:
         response = requests.post(
             f"https://api.telegram.org/bot{self.bot_api_token}/sendMessage",
             json={
@@ -23,12 +29,18 @@ class Telegram:
         ).json()
         return Response.parse_obj(response)
 
-    def send_log(self, head: str, body: str) -> Response:
-        text = f"<b>{head}</b>\n\n" \
-               f"<code>{body}</code>"
+    def send_log(self, head: str, body: str, dashboard: str) -> Response:
+        head_escaped = _escape_markdown_v2(head)
+        body_escaped = _escape_markdown_v2(body)
+        text = f"*{head_escaped}*\n\n" \
+               f"[harbor dashboard]({dashboard})\n\n" \
+               f"`{body_escaped}`"
         return self._send_message(text=text, chat_id=self.log_chat_id)
 
-    def send_alarm(self, head: str, body: str) -> Response:
-        text = f"<b>{head}</b>\n\n" \
-               f"<code>{body}</code>"
+    def send_alarm(self, head: str, body: str, dashboard: str) -> Response:
+        head_escaped = _escape_markdown_v2(head)
+        body_escaped = _escape_markdown_v2(body)
+        text = f"*{head_escaped}*\n\n" \
+               f"[harbor dashboard]({dashboard})\n\n" \
+               f"`{body_escaped}`"
         return self._send_message(text=text, chat_id=self.alarm_chat_id)

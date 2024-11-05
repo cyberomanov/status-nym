@@ -13,7 +13,7 @@ def nym(settings: Settings, identity: str, price: float, telegram: Telegram):
     try:
         report = get_nym_report(identity=identity, settings=settings)
     except Exception as e:
-        telegram_response = telegram.send_log(head="nym", body="bad response.")
+        telegram_response = telegram.send_log(head="nym", dashboard='', body="bad response.")
         if not telegram_response.ok:
             logger.error(
                 f"telegram response is not ok. "
@@ -29,11 +29,17 @@ def nym(settings: Settings, identity: str, price: float, telegram: Telegram):
 
     if message.status.value == 0:
         logger.success('no warnings found.')
-        telegram_response = telegram.send_log(head=message.head, body=message.body)
+        telegram_response = telegram.send_log(
+            head=message.head, dashboard=message.dashboard, body=message.body
+        )
     else:
         logger.warning('something is not ok.')
-        telegram_response = telegram.send_log(head=message.head, body=message.body)
-        telegram_response = telegram.send_alarm(head=message.head, body=message.body)
+        telegram_response = telegram.send_log(
+            head=message.head, dashboard=message.dashboard, body=message.body
+        )
+        telegram_response = telegram.send_alarm(
+            head=message.head, dashboard=message.dashboard, body=message.body
+        )
 
     if not telegram_response.ok:
         logger.error(

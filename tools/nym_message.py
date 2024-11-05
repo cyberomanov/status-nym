@@ -9,7 +9,8 @@ def get_nym_message(report: NymReport, price: float, ignore_inactive: bool) -> M
     denom = 1_000_000
 
     head = f"nym ⠀|⠀ {report.harbor.description.moniker}"
-    message = Message(status=Status.LOG, head=head, body='')
+    message = Message(status=Status.LOG, head=head, body='', dashboard='')
+    message.dashboard = f'https://harbourmaster.nymtech.net/mixnode/{report.mixnode.mix_id}'
     logger.success(report.harbor.description.moniker)
 
     if int(report.uptime.last_hour * 100) < hour_uptime_for_alarm:
@@ -98,7 +99,7 @@ def _get_max_match_index(text: str | list, pattern: str) -> int:
 
     max_index = 0
     for string in text:
-        if string.rfind(pattern) > max_index:
+        if 'http' not in string and string.rfind(pattern) > max_index:
             max_index = string.find(pattern)
     return max_index
 
@@ -110,9 +111,12 @@ def _text_align_by_arrow(text: str | list, max_arrow_index: int) -> str:
     new_body = ''
     for string in text:
         if len(string):
-            while string.rfind('>') != max_arrow_index:
-                string = string.replace('>', '>>', 1)
-            new_body += string + '\n'
+            if 'http' in string:
+                pass
+            else:
+                while string.rfind('>') != max_arrow_index:
+                    string = string.replace('>', '>>', 1)
+                new_body += string + '\n'
     return new_body
 
 
@@ -123,9 +127,12 @@ def _text_align_by_usd(text: str | list, max_arrow_index: int, max_usd_index: in
     new_body = ''
     for string in text:
         if '$' in string:
-            while string.rfind('$') != max_usd_index:
-                string = string[:max_arrow_index + 1] + ' ' + string[max_arrow_index + 1:]
-            new_body += string.replace(', ', ' | ') + '\n'
+            if 'http' in string:
+                pass
+            else:
+                while string.rfind('$') != max_usd_index:
+                    string = string[:max_arrow_index + 1] + ' ' + string[max_arrow_index + 1:]
+                new_body += string.replace(', ', ' | ') + '\n'
         else:
             new_body += string + '\n'
     return new_body
