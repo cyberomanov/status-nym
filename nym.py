@@ -25,7 +25,7 @@ def nym(settings: Settings, identity: str, price: float, telegram: Telegram):
         logger.error(f"bad response: {e}")
         return
 
-    message = get_nym_message(report=report, price=price, ignore_inactive=settings.ignore_inactive)
+    message = get_nym_message(report=report, price=price)
 
     if message.status.value == 0:
         logger.success('no warnings found.')

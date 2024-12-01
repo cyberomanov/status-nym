@@ -7,22 +7,21 @@ from tools.harbor import get_harbor_response
 def get_nym_report(identity: str, settings: Settings):
     explorer = Explorer(identity=identity)
     mixnode = explorer.get_mixnode_response(identity=identity)
-
+    harbor = get_harbor_response(mixnode_id=mixnode.node_id, mobile_proxy=settings.mobile_proxy)
     return NymReport(
         description=Description(
-            host=mixnode.mix_node.host,
-            location=mixnode.location.three_letter_iso_country_code
+            host=harbor.self_described.self_described.host_information.hostname
+            if harbor.self_described.self_described.host_information.hostname
+            else harbor.self_described.self_described.host_information.ip_address[0],
+            location=harbor.self_described.self_described.auxiliary_details.location
+            if harbor.self_described.self_described.auxiliary_details.location
+            else ""
         ),
         uptime=Uptime(
-            last_day=mixnode.node_performance.last_24h,
-            last_hour=mixnode.node_performance.last_hour,
+            last_day=harbor.full_details.node_performance.last_24h,
+            last_hour=harbor.full_details.node_performance.last_hour,
         ),
         mixnode=mixnode,
-        harbor=get_harbor_response(
-            mixnode_id=mixnode.mix_id,
-            mobile_proxy=settings.mobile_proxy,
-            change_ip_url=settings.change_ip_url
-        ),
-        # balance=explorer.get_balance(address=mixnode.owner),
-        owner_delegation=explorer.get_owner_delegation(mixnode_id=mixnode.mix_id)
+        harbor=harbor,
+        owner_delegation=explorer.get_owner_delegation(mixnode_id=str(harbor.mix_id))
     )

@@ -1,4 +1,5 @@
 from typing import List, Optional, Dict
+
 from pydantic import BaseModel
 
 
@@ -13,7 +14,7 @@ class PledgeAmount(BaseModel):
 
 
 class MixNode(BaseModel):
-    host: str
+    host: Optional[str]
     http_api_port: int
     identity_key: str
     mix_port: int
@@ -79,6 +80,7 @@ class Authenticator(BaseModel):
 
 class AuxiliaryDetails(BaseModel):
     accepted_operator_terms_and_conditions: bool
+    announce_ports: Dict[str, Optional[int]]
     location: Optional[str]
 
 
@@ -98,7 +100,7 @@ class BuildInformation(BaseModel):
 class HostInformation(BaseModel):
     hostname: Optional[str]
     ip_address: List[str]
-    keys: Dict[str, str]
+    keys: Dict[str, Optional[str]]
 
 
 class IpPacketRouter(BaseModel):
@@ -115,20 +117,24 @@ class NetworkRequester(BaseModel):
     uses_exit_policy: bool
 
 
-class Role(BaseModel):
-    Mixnode: Dict[str, int]
+class DeclaredRole(BaseModel):
+    mixnode: bool
+    entry: bool
+    exit_nr: bool
+    exit_ipr: bool
 
 
 class SelfDescribedDetails(BaseModel):
     authenticator: Optional[Authenticator]
     auxiliary_details: AuxiliaryDetails
     build_information: BuildInformation
+    declared_role: DeclaredRole
     host_information: HostInformation
     ip_packet_router: IpPacketRouter
     last_polled: str
     mixnet_websockets: MixnetWebsockets
     network_requester: NetworkRequester
-    role: Role
+    wireguard: Optional[Dict[str, Optional[str]]]
 
 
 class SelfDescribedModel(BaseModel):

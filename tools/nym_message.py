@@ -4,13 +4,13 @@ from datatypes.message import Message, Status
 from datatypes.report import NymReport
 
 
-def get_nym_message(report: NymReport, price: float, ignore_inactive: bool) -> Message:
+def get_nym_message(report: NymReport, price: float) -> Message:
     hour_uptime_for_alarm = 80
     denom = 1_000_000
 
     head = f"nym ⠀|⠀ {report.harbor.description.moniker}"
     message = Message(status=Status.LOG, head=head, body='', dashboard='')
-    message.dashboard = f'https://harbourmaster.nymtech.net/mixnode/{report.mixnode.mix_id}'
+    message.dashboard = f'https://harbourmaster.nymtech.net/mixnode/{report.mixnode.node_id}'
     logger.success(report.harbor.description.moniker)
 
     if int(report.uptime.last_hour * 100) < hour_uptime_for_alarm:
@@ -22,19 +22,9 @@ def get_nym_message(report: NymReport, price: float, ignore_inactive: bool) -> M
         text = f"hour/day > {int(report.uptime.last_hour * 100)}%/{int(report.uptime.last_day * 100)}%."
         logger.info(text)
 
-    text = f"version > {report.mixnode.mix_node.version}."
+    text = f"version > {report.harbor.full_details.mixnode_details.bond_information.mix_node.version}."
     logger.info(text)
     message.body += text + '\n'
-
-    if report.mixnode.status != 'active':
-        if not ignore_inactive:
-            message.status = Status.ALARM
-        text = f"_status > inactive."
-        logger.warning(text)
-        message.body += text + '\n'
-    else:
-        text = f"status > active."
-        logger.info(text)
 
     total_stake = round(report.harbor.total_stake / denom, 2)
     if price > 0:
@@ -47,7 +37,7 @@ def get_nym_message(report: NymReport, price: float, ignore_inactive: bool) -> M
 
     self_delegations_amount = 0
     for delegation in report.owner_delegation:
-        if delegation.owner.lower() == report.mixnode.owner.lower():
+        if delegation.owner.lower() == report.harbor.full_details.mixnode_details.bond_information.owner.lower():
             self_delegations_amount += round(int(delegation.amount.amount) / denom, 2)
 
     self_bond = round(int(report.harbor.full_details.mixnode_details.bond_information.original_pledge.amount) / denom,
@@ -60,6 +50,10 @@ def get_nym_message(report: NymReport, price: float, ignore_inactive: bool) -> M
         text = f"self-stake > {self_stake:.2f}."
     message.body += text + '\n'
     logger.info(text)
+
+    text = f"is_dp_delegatee > {report.harbor.is_dp_delegatee}."
+    logger.info(text)
+    message.body += text + '\n'
 
     # rewards_per_hour = report.rewards.operator
     # rewards_per_month = round(rewards_per_hour * 720 / denom, 2)

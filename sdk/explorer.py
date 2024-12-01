@@ -3,7 +3,7 @@ import json
 import requests
 
 from datatypes.delegation import DelegationResponse
-from datatypes.explorer import MixNodeModel
+from datatypes.explorer import NodeModel
 from datatypes.report import Balance
 
 
@@ -19,13 +19,16 @@ class Explorer:
         return requests.session()
 
     def _get_mixnodes_response(self):
-        response = self.session.get(f"{self.explorer}s")
-        return [MixNodeModel(**item) for item in json.loads(response.content)]
+        response = self.session.get(f"https://explorer.nymtech.net/api/v1/tmp/unstable/nym-nodes")
+        try:
+            return [NodeModel(**item) for item in json.loads(response.content)]
+        except Exception as e:
+            pass
 
     def get_mixnode_response(self, identity: str):
         mixnodes = self._get_mixnodes_response()
         for node in mixnodes:
-            if node.mix_node.identity_key == identity:
+            if node.bond_information.node.identity_key.lower() == identity.lower():
                 return node
 
     def get_balance(self, address: str) -> Balance:

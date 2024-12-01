@@ -1,13 +1,12 @@
 from pydantic import BaseModel
 
 from datatypes.delegation import DelegationResponse
-from datatypes.explorer import MixNodeModel
+from datatypes.explorer import NodeModel
 from datatypes.harbor import HarborResponse
 
 
 class Description(BaseModel):
     host: str
-    location: str
 
 
 class Uptime(BaseModel):
@@ -42,7 +41,7 @@ class Balance(BaseModel):
 class NymReport(BaseModel):
     description: Description
     uptime: Uptime
-    mixnode: MixNodeModel
+    mixnode: NodeModel
     harbor: HarborResponse
     # rewards: Rewards
     # balance: Balance
